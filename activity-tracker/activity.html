@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title></title>
+    <script src="https://unpkg.com/vue@2.6.7/dist/vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+
+        <h1>{{ activity }} Tracker</h1>
+
+
+        <div>
+            <h2>Add Hours</h2>
+
+            <form>
+                <div>
+                    <label for="when">When did you {{ activity | lowercase }}?</label><input id="when" type="datetime-local" v-model="when">
+                </div>
+
+                <div>
+                    <label for="howLong">How long did you {{ activity | lowercase }} for?</label><input id="howLong" v-model.number="howLong">
+                </div>
+
+                <div>
+                    <label for="type">What type?</label>
+                        <select v-model="type">
+                            <option v-for="c in types" value="c">{{ c }}</option>
+                        </select>
+                </div>
+
+                <div>
+                            <input id="v1" type="radio" value="{ digital }" v-model="digitalTraditional"><label for="v1">Digital</label>
+                            <input id="v2" type="radio" value="{ traditional }" v-model="digitalTraditional"><label for="v1">Traditional</label>       
+                </div>
+
+                <div>
+                    <button type="button" v-on:click="submit">Add record</button>
+                </div>
+
+            </form>
+        </div>
+
+        <!-- form here
+        select 
+        radio button
+        -->
+
+        <div>
+            <h2>Activity Record</h2>
+
+            <table>
+                <tr>
+                    <th>When</th>
+                    <th>How long?</th>
+                    <th>select prop</th>
+                    <th>radio prop</th>
+                </tr>
+                <tr v-for="record in activityRecords">
+                    <td>{{ record.when | dateFormat }}</td>
+                    <td>{{ record.howLong }}</td>
+                    <td>{{ record.type }}</td>
+                    <td>{{ record.digitalTraditional }}</td>
+                </tr>
+            </table>
+        </div>
+
+        <div>
+            <h2>Summary</h2>
+            <p>{{ totalHours }}</p> <!-- Computed property -->
+
+            <!-- total for each type  -->
+
+
+        </div>
+
+    </div>
+
+    <script>
+
+        let app = new Vue({
+            el: "#app",
+            data: {
+                activity: 'Practice Art',  // If you like, replace in your own activity name e.g. studying, running, playing video games.... 
+                when: new Date(),
+                howLong: 0,
+                type: 'sketching',
+                digitalTraditional: 'traditional',   // you may need to rename this property
+                activityRecords: [],
+                types: ['sketching', 'drawing', 'painting'],    // replace with appropriate options for your activity e.g. for video game, ['PC', 'PlayStation', 'Xbox' ]
+                digital: 'digital',          // on a computer, tablet                // replace with appropriate options for your activity e.g. for video games, single player and multi player 
+                traditional: 'traditional'   // painting, drawing etc. on paper
+            },
+            methods: {
+                submit() {
+                    let newActivityRecord = { when: this.when, howLong: this.howLong, select: this.selectProperty, radio: this.radioProperty }
+                    this.activityRecords.push(newActivityRecord)
+                    this.activityRecords.sort(function (r1, r2) { return r1.when.getTime() - r2.when.getTime() })
+                }
+            }, computed: {
+                totalHours() {
+                    let total = 0
+                    if (this.activityRecords.length > 0) {
+                        total = this.activityRecords.reduce(function (hoursAccumulator, currentRecord) { 
+                            hoursAccumulator + currentRecord.howLong }, 0)
+                    }
+                    return total
+                }
+            }, filters: {
+                lowercase(string) {
+                    return string.toLowerCase()
+                },
+                dateFormat(date) {
+                    return new Intl.DateTimeFormat().format(date) 
+                }
+            }
+
+        })
+
+    </script>
+
+</body>
+
+</html>
