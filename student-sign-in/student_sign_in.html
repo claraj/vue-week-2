@@ -6,11 +6,16 @@
     <script src="https://unpkg.com/vue@2.6.7/dist/vue.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
         crossorigin="anonymous">
-    <link rel="stylesheet" href="message.css" type="text/css">
+    <link rel="stylesheet" href="student.css" type="text/css">
 </head>
 
 <body>
     <div id="app">
+
+        <div class="alert alert-danger" v-show="errors && errors.length > 0">
+            <li v-for="error in errors">{{ error }}</li>
+        </div>
+
         <div class="card add-student m-2 p-2">
             <form>
                 <h4 class="card-title">Add new student</h4>
@@ -29,18 +34,20 @@
 
         <div class="card student-list m-2 p-2">
             <h4 class="card-title">Students</h4>
-            <table class="table">
-                <tr>
-                    <th>Name</th>
-                    <th>StarID</th>
-                    <th>Present?</th>
-                </tr>
-                <tr v-for="student in students">
-                    <td>{{ student.name }}</td>
-                    <td>{{ student.starID }}</td>
-                    <td> <input type="checkbox" v-model="student.present" v-on:change="checked(student)"></td>
-                </tr>
-            </table>
+            <div id="student-table">
+                <table class="table">
+                    <tr>
+                        <th>Name</th>
+                        <th>StarID</th>
+                        <th>Present?</th>
+                    </tr>
+                    <tr v-for="student in students">
+                        <td>{{ student.name }}</td>
+                        <td>{{ student.starID }}</td>
+                        <td> <input type="checkbox" v-model="student.present" v-on:change="checked(student)"></td>
+                    </tr>
+                </table>
+            </div>
         </div>
 
         <transition name="fade">
@@ -58,14 +65,20 @@
                 students: [{ name: "example", starID: "ab1234cd", present: true }],
                 mostRecentSignIn: '',
                 message: '',
-                seeMessage: false
+                seeMessage: false,
+                errors: []
             },
             methods: {
                 addStudent() {
+                    this.errors = []
                     if (this.newStudentName && this.newStarID) {
                         let student = { name: this.newStudentName, starID: this.newStarID, present: false }
                         this.students.push(student)
                         this.students.sort(function (s1, s2) { return s1.name > s2.name ? 1 : -1 })
+                        this.newStudentName = ''
+                        this.newStarID = ''
+                    } else {
+                        this.errors.push('Name and StarID are required.')
                     }
                 },
                 checked(student) {
@@ -80,7 +93,6 @@
                     }, 3000)
                 }
             },
-
         })
 
     </script>
