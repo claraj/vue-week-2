@@ -5,6 +5,10 @@
 * forms - select 
 * forms - radio buttons
 * .trim
+* .number
+* validation
+* more computed properties
+* mapping and filtering
 * vue transitions
 
 Live versions here [https://claraj.github.io/vue-week-2-examples](https://claraj.github.io/vue-week-2-examples)
