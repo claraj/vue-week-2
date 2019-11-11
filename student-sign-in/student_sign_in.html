@@ -12,7 +12,7 @@
 <body>
     <div id="app">
 
-        <div class="alert alert-danger" v-show="errors && errors.length > 0">
+        <div class="alert alert-danger" v-show="errors.length">
             <li v-for="error in errors">{{ error }}</li>
         </div>
 
