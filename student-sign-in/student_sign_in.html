@@ -39,7 +39,7 @@
                         <th>StarID</th>
                         <th>Present?</th>
                     </tr>
-                    <tr v-for="student in students" v-bind:class="'present-' + student.present">
+                    <tr v-for="student in students" v-bind:class="{ present: student.present, absent: !student.present }">
                         <td>{{ student.name }}</td>
                         <td>{{ student.starID }}</td>
                         <td> <input type="checkbox" v-model="student.present" v-on:change="checked(student)"></td>
