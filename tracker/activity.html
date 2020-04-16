@@ -3,7 +3,7 @@
 
 <head>
     <title>Practice Tracker</title>
-    <script src="https://unpkg.com/vue@2.6.7/dist/vue.js"></script>
+    <script src="https://unpkg.com/vue@2.6.11/dist/vue.js"></script>
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
         crossorigin="anonymous">
@@ -28,12 +28,18 @@
 
                     <div class="form-group">
                         <label class="form-label" for="when">When did you {{ activity | lowercase }}?</label>
-                        <input id="when" class="form-control" type="date" v-model.lazy="when">
+                        <input id="when" class="form-control" type="date" v-model="whenString">
+                        <small id="whenHelp" class="form-text text-muted">
+                            What date did you practice? Must be today or in the past.
+                        </small>
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label" for="howLong">How long did you practice for?</label>
-                        <input id="howLong" class="form-control" v-model.number.lazy="howLong">
+                        <label class="form-label" for="howLong">How many hours did you practice for?</label>
+                        <input id="howLong" class="form-control" v-model.number="howLong">
+                        <small id="howLongHelp" class="form-text text-muted">
+                            Enter a number of hours, more than 0 but less than 24
+                        </small>
                     </div>
 
                     <div class="form-group">
@@ -43,14 +49,18 @@
                         </select>
                     </div>
 
-                    <div class="form-check-inline">
-                        <input id="v2" class="form-check-input" type="radio" v-bind:value="traditional" v-model="digitalTraditional">
-                        <label class="form-check-label" for="v1">Traditional</label>
+                    <div class="form-label pb-2">
+                        What media?
                     </div>
 
                     <div class="form-check-inline">
-                        <input id="v1" class="form-check-input" type="radio" v-bind:value="digital" v-model="digitalTraditional">
-                        <label class="form-check-label" for="v1">Digital</label>
+                        <input id="v1" class="form-check-input" type="radio" v-bind:value="medias.traditional" v-model="media">
+                        <label class="form-check-label" for="v1">{{medias.traditional}}</label>
+                    </div>
+
+                    <div class="form-check-inline">
+                        <input id="v2" class="form-check-input" type="radio" v-bind:value="medias.digital" v-model="media">
+                        <label class="form-check-label" for="v2">{{medias.digital}}</label>
                     </div>
 
                     <div>
@@ -62,7 +72,7 @@
         </div>
 
         <div class="card">
-            <h2 class="card-header">Activity Record</h2>
+            <h2 class="card-header">Activity Records</h2>
 
             <div class="card-body">
                 <h3>{{ activityRecords.length }} records</h3>
@@ -73,13 +83,13 @@
                             <th>When</th>
                             <th>How long?</th>
                             <th>Type</th>
-                            <th>Digital or traditional?</th>
+                            <th>Media</th>
                         </tr>
                         <tr v-for="record in activityRecords">
-                            <td>{{ record.when | shortDateFormat }}</td>
+                            <td>{{ record.when | shortDate }}</td>
                             <td>{{ record.howLong }}</td>
                             <td>{{ record.type }}</td>
-                            <td>{{ record.digitalTraditional }}</td>
+                            <td>{{ record.media }}</td>
                         </tr>
                     </table>
                 </div>
@@ -106,41 +116,49 @@
             el: "#app",
             data: {
                 activity: 'Practice Art',  // If you like, replace in your own activity name e.g. studying, running, playing video games.... 
-                when: '',
+                whenString: '',
                 howLong: 1,
-                type: 'sketching',
-                digitalTraditional: 'traditional',   // you may wish to rename this 
+                type: '',
+                media: '',   
                 activityRecords: [],
-                types: ['sketching', 'drawing', 'painting'],    // replace with appropriate options for your activity e.g. for video game, ['PC', 'PlayStation', 'Xbox' ]
-                digital: 'digital',          // on a computer, tablet                // replace with appropriate options for your activity e.g. for video games, single player and multi player 
-                traditional: 'traditional',   // painting, drawing etc. on paper
+                types: [ 'Sketching', 'Drawing', 'Painting' ],    // replace with appropriate options for your activity e.g. for video game, ['PC', 'PlayStation', 'Xbox' ]
+                medias:                          // replace with appropriate options for your activity e.g. for video games, single player and multi player 
+                    {
+                        digital: 'Digital',          // on a computer, tablet           
+                        traditional: 'Traditional'   // painting, drawing etc. on paper 
+                    },   
                 errors: []
             },
             methods: {
                 submit() {     
                     this.errors = []
 
-                    if (this.whenLocal == 'Invalid Date' || this.whenLocal.getTime() > new Date().getTime()) {
+                    let date = new Date(this.whenString)
+
+                    if (!this.whenString || this.whenString == 'Invalid Date' || date.getTime() > new Date().getTime()) {
                         this.errors.push('Select a valid date, today or in the past')
                     }
 
-                    if (typeof (this.howLong) != "number" || this.howLong <= 0) {
-                        this.errors.push('The number of hours must be a number greater than zero.')
+                    if (typeof this.howLong != "number" || this.howLong < 0 || this.howLong >= 24) {
+                        this.errors.push('The number of hours must be a number greater than zero and less than 24.')
                     }
 
+                    if (!this.type) {
+                        this.errors.push('Select a type')
+                    }
+
+                    if (!this.media) {
+                        this.errors.push('Select a media')
+                    }
+            
                     if (this.errors.length == 0) {
-                        let newActivityRecord = { when: this.whenLocal, howLong: this.howLong, type: this.type, digitalTraditional: this.digitalTraditional }
+                        let newActivityRecord = { when: date, howLong: this.howLong, type: this.type, media: this.media }
                         this.activityRecords.push(newActivityRecord)
                         this.activityRecords.sort(function (r1, r2) { return r1.when.getTime() - r2.when.getTime() })
                     }
                 }
             }, computed: {
-                whenLocal() {
-                    let date = new Date(this.when)
-                    let timestamp = date.getTime() + (date.getTimezoneOffset() * 60 * 1000)
-                    let localDate = new Date(timestamp)
-                    return localDate
-                },
+               
                 totalHours() {
                     let total = 0
                     if (this.activityRecords.length > 0) {
@@ -154,8 +172,8 @@
                 lowercase(string) {
                     return string.toLowerCase()
                 },
-                shortDateFormat(date) {
-                    return new Intl.DateTimeFormat().format(date)
+                shortDate(date) {
+                   return new Intl.DateTimeFormat('en-Us', {timeZone: 'UTC'}).format(date)
                 }
             }
         })
