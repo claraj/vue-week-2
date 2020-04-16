@@ -101,10 +101,12 @@
             <h2 class="card-header">Summary</h2>
 
             <div class="card-body">
-                <!-- Computed property -->
+
+                <!-- Uses a computed property -->
                 <p>You have practiced a total of {{ totalHours }} hours</p>
 
                 <!-- Challenge question! Display a list of the total hours for each type.  -->
+          
             </div>
         </div>
 
@@ -124,8 +126,8 @@
                 types: [ 'Sketching', 'Drawing', 'Painting' ],    // replace with appropriate options for your activity e.g. for video game, ['PC', 'PlayStation', 'Xbox' ]
                 medias:                          // replace with appropriate options for your activity e.g. for video games, single player and multi player 
                     {
-                        traditional: 'Traditional',  // painting, drawing etc. on paper 
-                        digital: 'Digital'          // on a computer, tablet           
+                        traditional: 'Traditional',  // painting, drawing etc. on paper, canvas...
+                        digital: 'Digital'          // on a computer or tablet           
                     },   
                 errors: []
             },
@@ -161,7 +163,7 @@
                         let newActivityRecord = { date: date, hours: this.hours, type: this.type, media: this.media }
                         this.activityRecords.push(newActivityRecord)
                         this.activityRecords.sort(function (r1, r2) { 
-                            // subtracting one date from another returns the difference, in milliseconds, between them 
+                            // subtracting one date from another date returns the difference, in milliseconds, between them 
                             return r1.date - r2.date   
                         })
                     }
