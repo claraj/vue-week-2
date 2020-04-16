@@ -7,7 +7,7 @@
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
         crossorigin="anonymous">
-    <link rel="stylesheet" href="practice_style.css" type="text/css">
+    <link rel="stylesheet" href="styles.css" type="text/css">
 </head>
 
 <body>
@@ -93,11 +93,8 @@
             <div class="card-body">
                 <!-- Computed property -->
                 <p>You have practiced a total of {{ totalHours }} hours, broken down as follows:</p>
-                
-                <!-- total for each type  -->
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item" v-for="hours, type in totalHoursByType">{{ type }}: {{ hours }}</li>
-                </ul>
+
+                <!-- Challenge question! Display a list of the total hours for each type.  -->
             </div>
         </div>
 
@@ -147,23 +144,12 @@
                 totalHours() {
                     let total = 0
                     if (this.activityRecords.length > 0) {
-                        total = this.activityRecords.reduce(function (hoursAccumulator, currentRecord) {
-                            return hoursAccumulator + currentRecord.howLong
-                        }, 0)
+                        this.activityRecords.forEach( record => {
+                            total = total + record.howLong
+                        });
                     }
                     return total
                 },
-                totalHoursByType() {
-                    let hoursByType = {}
-                    let self = this
-                    this.types.forEach(function (type) {
-                        let totalForType = self.activityRecords
-                            .filter(function (record) { return record.type === type })
-                            .reduce(function (accumulator, current) { return accumulator + current.howLong }, 0)
-                        hoursByType[type] = totalForType
-                    })
-                    return hoursByType
-                }
             }, filters: {
                 lowercase(string) {
                     return string.toLowerCase()
