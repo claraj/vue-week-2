@@ -52,13 +52,13 @@
                 </div>
 
                 <div class="form-check-inline">
-                    <input id="media1" class="form-check-input" type="radio" v-bind:value="medias.traditional" v-model="media">
-                    <label class="form-check-label" for="media1">{{medias.traditional}}</label>
+                    <input id="media1" class="form-check-input" type="radio" v-bind:value="media.traditional" v-model="medium">
+                    <label class="form-check-label" for="media1">{{media.traditional}}</label>
                 </div>
 
                 <div class="form-check-inline">
-                    <input id="media2" class="form-check-input" type="radio" v-bind:value="medias.digital" v-model="media">
-                    <label class="form-check-label" for="media2">{{medias.digital}}</label>
+                    <input id="media2" class="form-check-input" type="radio" v-bind:value="media.digital" v-model="medium">
+                    <label class="form-check-label" for="media2">{{media.digital}}</label>
                 </div>
 
                 <div>
@@ -86,7 +86,7 @@
                             <td>{{ record.date | shortDate }}</td>
                             <td>{{ record.hours }}</td>
                             <td>{{ record.type }}</td>
-                            <td>{{ record.media }}</td>
+                            <td>{{ record.medium }}</td>
                         </tr>
                     </table>
                 </div>
@@ -118,10 +118,10 @@
                 dateString: '',
                 hours: 1,
                 type: '',
-                media: '',   
+                medium: '',   
                 activityRecords: [],
                 types: [ 'Sketching', 'Drawing', 'Painting' ],    // replace with appropriate options for your activity e.g. for video game, ['PC', 'PlayStation', 'Xbox' ]
-                medias:                          // replace with appropriate options for your activity e.g. for video games, single player and multi player 
+                media:                          // replace with appropriate options for your activity e.g. for video games, single player and multi player 
                     {
                         traditional: 'Traditional',  // painting, drawing etc. on paper, canvas...
                         digital: 'Digital'          // on a computer or tablet           
@@ -131,7 +131,7 @@
             mounted() {
                 // The mounted method is called date the Vue component first displays the HTML template on the page 
                 this.type = this.types[0]
-                this.media = this.medias.traditional  
+                this.medium = this.media.traditional  
             },
             methods: {
                 submit() {     
@@ -157,7 +157,7 @@
                     }
             
                     if (this.errors.length == 0) {
-                        let newActivityRecord = { date: date, hours: this.hours, type: this.type, media: this.media }
+                        let newActivityRecord = { date: date, hours: this.hours, type: this.type, medium: this.medium }
                         this.activityRecords.push(newActivityRecord)
                         this.activityRecords.sort(function (r1, r2) { 
                             // subtracting one date from another date returns the difference, in milliseconds, between them 
