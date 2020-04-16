@@ -36,9 +36,9 @@
 
                     <div class="form-group">
                         <label class="form-label" for="howLong">How many hours did you practice for?</label>
-                        <input id="howLong" class="form-control" v-model.number="howLong">
+                        <input id="howLong" class="form-control" type="number" min="0" max="24" v-model.number="howLong">
                         <small id="howLongHelp" class="form-text text-muted">
-                            Enter a number of hours, more than 0 but less than 24
+                            Enter a number of hours, more than 0, up to a maximum of 24
                         </small>
                     </div>
 
