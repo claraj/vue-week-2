@@ -115,7 +115,7 @@
         let app = new Vue({
             el: "#app",
             data: {
-                activity: 'Practice Art',  // If you like, replace in your own activity name e.g. studying, running, playing video games.... 
+                activity: 'Practice Art',  // If you like, replace in your own activity name e.g. Study, Exercise, Play Video Games.... 
                 whenString: '',
                 howLong: 1,
                 type: '',
@@ -133,9 +133,9 @@
                 submit() {     
                     this.errors = []
 
-                    let date = new Date(this.whenString)
+                    let when = new Date(this.whenString)
 
-                    if (!this.whenString || this.whenString == 'Invalid Date' || date.getTime() > new Date().getTime()) {
+                    if (!this.whenString || this.whenString == 'Invalid Date' || when.getTime() > new Date() ) {   // Date A is 'greater than' Date B if  Date A is in the future of Date B 
                         this.errors.push('Select a valid date, today or in the past')
                     }
 
@@ -152,9 +152,11 @@
                     }
             
                     if (this.errors.length == 0) {
-                        let newActivityRecord = { when: date, howLong: this.howLong, type: this.type, media: this.media }
+                        let newActivityRecord = { when: when, howLong: this.howLong, type: this.type, media: this.media }
                         this.activityRecords.push(newActivityRecord)
-                        this.activityRecords.sort(function (r1, r2) { return r1.when.getTime() - r2.when.getTime() })
+                        this.activityRecords.sort(function (r1, r2) { 
+                            return r1.when - r2.when   // subtracting one date from another returns the number of milliseconds different between them 
+                        })
                     }
                 }
             }, computed: {
