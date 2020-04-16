@@ -19,55 +19,52 @@
 
             <h2 class="card-header">Add Records</h2>
             <div class="card-body">
+               
+                <div class="alert alert-danger" v-show="errors && errors.length > 0">
+                    <li v-for="error in errors">{{ error }}</li>
+                </div>
 
-                <form>
+                <div class="form-group">
+                    <label class="form-label" for="date">date did you {{ activity | lowercase }}?</label>
+                    <input id="date" class="form-control" type="date" v-model="dateString">
+                    <small id="date-help" class="form-text text-muted">
+                        What date did you practice? Must be today or in the past.
+                    </small>
+                </div>
 
-                    <div class="alert alert-danger" v-show="errors && errors.length > 0">
-                        <li v-for="error in errors">{{ error }}</li>
-                    </div>
+                <div class="form-group">
+                    <label class="form-label" for="hours">How many hours did you practice for?</label>
+                    <input id="hours" class="form-control" type="number" min="0" max="24" v-model.number="hours">
+                    <small id="hours-help" class="form-text text-muted">
+                        Enter a number of hours, more than 0, up to a maximum of 24
+                    </small>
+                </div>
 
-                    <div class="form-group">
-                        <label class="form-label" for="date">date did you {{ activity | lowercase }}?</label>
-                        <input id="date" class="form-control" type="date" v-model="dateString">
-                        <small id="date-help" class="form-text text-muted">
-                            What date did you practice? Must be today or in the past.
-                        </small>
-                    </div>
+                <div class="form-group">
+                    <label class="form-label" for="type">What type?</label>
+                    <select class="form-control" v-model="type">
+                        <option v-for="type in types" v-bind:value="type">{{ type }}</option>
+                    </select>
+                </div>
 
-                    <div class="form-group">
-                        <label class="form-label" for="hours">How many hours did you practice for?</label>
-                        <input id="hours" class="form-control" type="number" min="0" max="24" v-model.number="hours">
-                        <small id="hours-help" class="form-text text-muted">
-                            Enter a number of hours, more than 0, up to a maximum of 24
-                        </small>
-                    </div>
+                <div class="form-label pb-2">
+                    What media?
+                </div>
 
-                    <div class="form-group">
-                        <label class="form-label" for="type">What type?</label>
-                        <select class="form-control" v-model="type">
-                            <option v-for="type in types" v-bind:value="type">{{ type }}</option>
-                        </select>
-                    </div>
+                <div class="form-check-inline">
+                    <input id="media1" class="form-check-input" type="radio" v-bind:value="medias.traditional" v-model="media">
+                    <label class="form-check-label" for="media1">{{medias.traditional}}</label>
+                </div>
 
-                    <div class="form-label pb-2">
-                        What media?
-                    </div>
+                <div class="form-check-inline">
+                    <input id="media2" class="form-check-input" type="radio" v-bind:value="medias.digital" v-model="media">
+                    <label class="form-check-label" for="media2">{{medias.digital}}</label>
+                </div>
 
-                    <div class="form-check-inline">
-                        <input id="media1" class="form-check-input" type="radio" v-bind:value="medias.traditional" v-model="media">
-                        <label class="form-check-label" for="media1">{{medias.traditional}}</label>
-                    </div>
-
-                    <div class="form-check-inline">
-                        <input id="media2" class="form-check-input" type="radio" v-bind:value="medias.digital" v-model="media">
-                        <label class="form-check-label" for="media2">{{medias.digital}}</label>
-                    </div>
-
-                    <div>
-                        <button class="btn btn-primary mt-2" type="button" v-on:click="submit">Add record</button>
-                    </div>
-
-                </form>
+                <div>
+                    <button class="btn btn-primary mt-2" type="button" v-on:click="submit">Add record</button>
+                </div>
+                
             </div>
         </div>
 
