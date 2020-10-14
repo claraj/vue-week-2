@@ -9,6 +9,5 @@
 * validation
 * more computed properties
 * mapping and filtering
-* vue transitions
 
 Live versions here [https://claraj.github.io/vue-week-2](https://claraj.github.io/vue-week-2)
