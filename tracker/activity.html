@@ -164,7 +164,9 @@
                     }
 
                     // Verify hours is a number, and within the correct range
-                    if (typeof(this.hours) != Number || this.hours < 0 || this.hours > 24) {
+                    this.hours = parseFloat(this.hours)   // Returns NaN if the string can't be converted to a number 
+                    // greater than and less than comparisons with NaN are always false
+                    if (this.hours <= 0 || this.hours > 24) {
                         this.errors.push('The number of hours must be a number greater than 0 and less than 24.')
                     }
 
