@@ -11,9 +11,9 @@
 
 <body>
     <div id="app">
-
+        
         <div class="alert alert-danger" v-show="errors.length">
-            <li v-for="error in errors">{{ error }}</li>
+            <li v-for="error in errors" v-bind:key="error">{{ error }}</li>
         </div>
 
         <div class="card add-student m-2 p-2">
@@ -40,7 +40,7 @@
                         <th>Present?</th>
                     </tr>
 
-                    <tr v-for="student in students" v-bind:class="{ present: student.present, absent: !student.present }">
+                    <tr v-for="student in students" v-bind:key="student.starID" v-bind:class="{ present: student.present, absent: !student.present }">
                         <td>{{ student.name }}</td>
                         <td>{{ student.starID }}</td>
                         <td> <input type="checkbox" v-model="student.present" v-on:change="arrivedOrLeft(student)"></td>
