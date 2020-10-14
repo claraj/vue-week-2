@@ -20,7 +20,7 @@
             <h2 class="card-header">Add Records</h2>
             <div class="card-body">
                
-                <div class="alert alert-danger" v-show="errors && errors.length > 0">
+                <div class="alert alert-danger" v-show="errors.length > 0">
                     <li v-for="error in errors">{{ error }}</li>
                 </div>
 
@@ -163,7 +163,8 @@
                         this.errors.push('Select a valid date, today or in the past')
                     }
 
-                    if (this.hours < 0 || this.hours > 24) {
+                    // Verify hours is a number, and within the correct range
+                    if (typeof(this.hours) != Number || this.hours < 0 || this.hours > 24) {
                         this.errors.push('The number of hours must be a number greater than 0 and less than 24.')
                     }
 
@@ -180,6 +181,8 @@
                         this.activityRecords.push(newActivityRecord)
                         this.activityRecords.sort(function (r1, r2) { 
                             // subtracting one date from another date returns the difference, in milliseconds, between them 
+                            // sort expects this function to return a negative or positive number 
+                            // to indicate if the record r1 should be sorted before or after r2
                             return r1.date - r2.date   
                         })
                     }
