@@ -114,38 +114,57 @@
         let app = new Vue({
             el: "#app",
             data: {
+
+                // Theme of page
                 activity: 'Practice Art',  // If you like, replace in your own activity name e.g. Study, Exercise, Play Video Games.... 
+                
+                // form input bindings - connect to form input/select with v-model
                 dateString: '',
                 hours: 1,
                 type: '',
-                medium: '',   
+                medium: '',  
+
+                // Array of activity records 
                 activityRecords: [],
-                types: [ 'Sketching', 'Drawing', 'Painting' ],    // replace with appropriate options for your activity e.g. for video game, ['PC', 'PlayStation', 'Xbox' ]
-                media:                          // replace with appropriate options for your activity e.g. for video games, single player and multi player 
+
+                // Data used to set up select and radio buttons 
+                types: [ 'Sketching', 'Drawing', 'Painting' ],    // If you changed the activity, replace with appropriate options for your activity e.g. for video game, ['PC', 'PlayStation', 'Xbox' ]
+                media:                          // If you changed the activity, replace with appropriate options for your activity e.g. for video games, it could be single player and multi player 
                     {
                         traditional: 'Traditional',  // painting, drawing etc. on paper, canvas...
                         digital: 'Digital'          // on a computer or tablet           
                     },   
-                errors: []
+
+                // list of form errors 
+                errors: []   
             },
             mounted() {
-                // The mounted method is called date the Vue component first displays the HTML template on the page 
+                // The mounted method is called when the Vue component first displays the HTML template on the page 
                 this.type = this.types[0]
                 this.medium = this.media.traditional  
+
+                // Set the date input to today's date 
+                let now = new Date()
+                let year = now.getFullYear()
+                let month = now.getMonth() + 1  // months are zero-indexed. January is 0, February is 1
+                let day = now.getDate()  // dates - as in date in the month - are the number you'd expect. JS is weird. 
+                let dateStr = `${year}-${month.toString().padStart(2, 0)}-${day.toString().padStart(2, 0)}`
+                this.dateString = dateStr
             },
             methods: {
                 submit() {     
                     this.errors = []
 
-                    // The data in a input type="date" is a string. Convert it to a Date object
+                    // The data in a input type="date" is a string in the form '2020-12-31' for Dec 31, 2020. Convert it to a Date object
                     let date = new Date(this.dateString)
 
-                    if (!this.dateString || this.dateString == 'Invalid Date' || date.getTime() > new Date() ) {   // Date A is 'greater than' Date B if  Date A is in the future of Date B 
+                    // Date A is 'greater than' Date B if  Date A is in the future compared to Date B 
+                    if (!this.dateString || this.dateString == 'Invalid Date' || date.getTime() > new Date() ) {   
                         this.errors.push('Select a valid date, today or in the past')
                     }
 
-                    if (typeof this.hours != "number" || this.hours < 0 || this.hours > 24) {
-                        this.errors.push('The number of hours must be a number greater than zero and less than 24.')
+                    if (this.hours < 0 || this.hours > 24) {
+                        this.errors.push('The number of hours must be a number greater than 0 and less than 24.')
                     }
 
                     if (!this.type) {
@@ -168,11 +187,9 @@
             }, computed: {
                 totalHours() {
                     let total = 0
-                    if (this.activityRecords.length > 0) {
-                        this.activityRecords.forEach( record => {
-                            total = total + record.hours
-                        });
-                    }
+                    this.activityRecords.forEach( record => {
+                        total = total + record.hours
+                    });
                     return total
                 },
             }, filters: {
