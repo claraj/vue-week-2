@@ -72,7 +72,7 @@
             <h2 class="card-header">Activity Records</h2>
 
             <div class="card-body">
-                <h3>{{ activityRecords.length }} records</h3>
+                <h3>{{ totalRecords }}</h3>
 
                 <div id="records">
                     <table class="table table-hover">
@@ -121,7 +121,7 @@
                 // form input bindings - connect to form input/select with v-model
                 dateString: '',
                 hours: 1,
-                type: '',
+                type: 'Sketching',
                 medium: '',  
 
                 // Array of activity records 
@@ -138,19 +138,6 @@
                 // list of form errors 
                 errors: []   
             },
-            mounted() {
-                // The mounted method is called when the Vue component first displays the HTML template on the page 
-                this.type = this.types[0]
-                this.medium = this.media.traditional  
-
-                // Set the date input to today's date 
-                let now = new Date()
-                let year = now.getFullYear()
-                let month = now.getMonth() + 1  // months are zero-indexed. January is 0, February is 1
-                let day = now.getDate()  // dates - as in date in the month - are the number you'd expect. JS is weird. 
-                let dateStr = `${year}-${month.toString().padStart(2, 0)}-${day.toString().padStart(2, 0)}`
-                this.dateString = dateStr
-            },
             methods: {
                 submit() {     
                     this.errors = []
@@ -159,7 +146,7 @@
                     let date = new Date(this.dateString)
 
                     // Date A is 'greater than' Date B if  Date A is in the future compared to Date B 
-                    if (!this.dateString || this.dateString == 'Invalid Date' || date.getTime() > new Date() ) {   
+                    if (!this.dateString || this.dateString == 'Invalid Date' || date > new Date() ) {   
                         this.errors.push('Select a valid date, today or in the past')
                     }
 
@@ -185,19 +172,29 @@
                             // subtracting one date from another date returns the difference, in milliseconds, between them 
                             // sort expects this function to return a negative or positive number 
                             // to indicate if the record r1 should be sorted before or after r2
-                            return r1.date - r2.date   
+                            return r1.date.getTime() - r2.date.getTime()
                         })
                     }
                 }
-            }, computed: {
+            }, 
+            computed: {
+                totalRecords() {
+                    let numberOfRecords = this.activityRecords.length
+                    if (numberOfRecords == 1) {
+                        return '1 record'
+                    } else {
+                        return `${numberOfRecords} records`
+                    }
+                },
                 totalHours() {
                     let total = 0
                     this.activityRecords.forEach( record => {
                         total = total + record.hours
-                    });
-                    return total
-                },
-            }, filters: {
+                    })
+                    return total 
+                }
+            }, 
+            filters: {
                 lowercase(string) {
                     return string.toLowerCase()
                 },
