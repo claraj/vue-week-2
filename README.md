@@ -4,10 +4,7 @@
 * forms - checkboxes
 * forms - select 
 * forms - radio buttons
-* .trim
-* .number
 * validation
 * more computed properties
-* mapping and filtering
 
 Live versions here [https://claraj.github.io/vue-week-2](https://claraj.github.io/vue-week-2)

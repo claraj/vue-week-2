@@ -3,8 +3,8 @@
 
 <head>
     <title>Practice Tracker</title>
-    <script src="https://unpkg.com/vue@2.6.11/dist/vue.js"></script>
-
+    <script src="https://unpkg.com/vue@next"></script>
+    
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
         crossorigin="anonymous">
     <link rel="stylesheet" href="styles.css" type="text/css">
@@ -25,7 +25,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label" for="date">What date did you {{ activity | lowercase }}?</label>
+                    <label class="form-label" for="date">What date did you do this activity?</label>
                     <input id="date" class="form-control" type="date" v-model="dateString">
                     <small id="date-help" class="form-text text-muted">
                         Date must be today or in the past.
@@ -111,32 +111,33 @@
 
     <script>
 
-        let app = new Vue({
-            el: "#app",
-            data: {
+        let app = Vue.createApp({
+            data() {
+                return {
 
-                // Theme of page
-                activity: 'Practice Art',  // If you like, replace in your own activity name e.g. Study, Exercise, Play Video Games.... 
-                
-                // form input bindings - connect to form input/select with v-model
-                dateString: '',
-                hours: 1,
-                type: 'Sketching',
-                medium: '',  
+                    // Theme of page
+                    activity: 'Practice Art',  // If you like, replace in your own activity name e.g. Study, Exercise, Play Video Games.... 
+                    
+                    // form input bindings - connect to form input/select with v-model
+                    dateString: '',
+                    hours: 1,
+                    type: 'Sketching',
+                    medium: '',  
 
-                // Array of activity records 
-                activityRecords: [],
+                    // Array of activity records 
+                    activityRecords: [],
 
-                // Data used to set up select and radio buttons 
-                types: [ 'Sketching', 'Drawing', 'Painting' ],    // If you changed the activity, replace with appropriate options for your activity e.g. for video game, ['PC', 'PlayStation', 'Xbox' ]
-                media:                          // If you changed the activity, replace with appropriate options for your activity e.g. for video games, it could be single player and multi player 
-                    {
-                        traditional: 'Traditional',  // painting, drawing etc. on paper, canvas...
-                        digital: 'Digital'          // on a computer or tablet           
-                    },   
+                    // Data used to set up select and radio buttons 
+                    types: [ 'Sketching', 'Drawing', 'Painting' ],    // If you changed the activity, replace with appropriate options for your activity e.g. for video game, ['PC', 'PlayStation', 'Xbox' ]
+                    media:                          // If you changed the activity, replace with appropriate options for your activity e.g. for video games, it could be single player and multi player 
+                        {
+                            traditional: 'Traditional',  // painting, drawing etc. on paper, canvas...
+                            digital: 'Digital'          // on a computer or tablet           
+                        },   
 
-                // list of form errors 
-                errors: []   
+                    // list of form errors 
+                    errors: []
+                }   
             },
             methods: {
                 submit() {     
@@ -192,18 +193,14 @@
                         total = total + record.hours
                     })
                     return total 
-                }
-            }, 
-            filters: {
-                lowercase(string) {
-                    return string.toLowerCase()
                 },
-                shortDate(date) {
-                   return new Intl.DateTimeFormat('en-US', {timeZone: 'UTC'}).format(date)
+                shortDate() {
+                    return new Intl.DateTimeFormat('en-US', {timeZone: 'UTC'}).format(date)
                 }
             }
         })
 
+        app.mount('#app')
     </script>
 
 </body>
