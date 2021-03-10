@@ -53,12 +53,12 @@
 
                 <div class="form-check-inline">
                     <input id="media1" class="form-check-input" type="radio" v-bind:value="media.traditional" v-model="medium">
-                    <label class="form-check-label" for="media1">{{media.traditional}}</label>
+                    <label class="form-check-label" for="media1">{{ media.traditional }}</label>
                 </div>
 
                 <div class="form-check-inline">
                     <input id="media2" class="form-check-input" type="radio" v-bind:value="media.digital" v-model="medium">
-                    <label class="form-check-label" for="media2">{{media.digital}}</label>
+                    <label class="form-check-label" for="media2">{{ media.digital }}</label>
                 </div>
 
                 <div>
@@ -83,7 +83,7 @@
                             <th>Media</th>
                         </tr>
                         <tr v-for="record in activityRecords">
-                            <td>{{ record.date | shortDate }}</td>
+                            <td>{{ shortDate(record.date) }}</td>
                             <td>{{ record.hours }}</td>
                             <td>{{ record.type }}</td>
                             <td>{{ record.medium }}</td>
@@ -99,7 +99,7 @@
 
             <div class="card-body">
 
-                <!-- Uses a computed property -->
+                <!-- Display a computed property -->
                 <p>You have practiced a total of {{ totalHours }} hours</p>
 
                 <!-- Challenge question! Display a list of the total hours for each type.  -->
@@ -176,6 +176,10 @@
                             return r1.date.getTime() - r2.date.getTime()
                         })
                     }
+                },
+                shortDate(date) {
+                    // Used to format the dates displayed in the template
+                    return new Intl.DateTimeFormat('en-US', {timeZone: 'UTC'}).format(date)
                 }
             }, 
             computed: {
@@ -193,14 +197,12 @@
                         total = total + record.hours
                     })
                     return total 
-                },
-                shortDate() {
-                    return new Intl.DateTimeFormat('en-US', {timeZone: 'UTC'}).format(date)
                 }
             }
         })
 
         app.mount('#app')
+
     </script>
 
 </body>
