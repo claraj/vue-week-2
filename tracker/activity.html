@@ -20,7 +20,7 @@
             <h2 class="card-header">Add Records</h2>
             <div class="card-body">
                
-                <div class="alert alert-danger" v-show="errors.length > 0">
+                <div class="alert alert-danger" v-if="errors.length > 0">
                     <li v-for="error in errors">{{ error }}</li>
                 </div>
 
@@ -52,13 +52,13 @@
                 </div>
 
                 <div class="form-check-inline">
-                    <input id="media1" class="form-check-input" type="radio" v-bind:value="media.traditional" v-model="medium">
-                    <label class="form-check-label" for="media1">{{ media.traditional }}</label>
+                    <input id="media1" class="form-check-input" type="radio" value="Traditional" v-model="medium">
+                    <label class="form-check-label" for="media1">Traditional</label>
                 </div>
 
                 <div class="form-check-inline">
-                    <input id="media2" class="form-check-input" type="radio" v-bind:value="media.digital" v-model="medium">
-                    <label class="form-check-label" for="media2">{{ media.digital }}</label>
+                    <input id="media2" class="form-check-input" type="radio" value="Digital" v-model="medium">
+                    <label class="form-check-label" for="media2">Digital</label>
                 </div>
 
                 <div>
@@ -72,7 +72,7 @@
             <h2 class="card-header">Activity Records</h2>
 
             <div class="card-body">
-                <h3>{{ totalRecords }}</h3>
+                <h3>{{ totalRecordsMessage }}</h3>
 
                 <div id="records">
                     <table class="table table-hover">
@@ -121,19 +121,14 @@
                     // form input bindings - connect to form input/select with v-model
                     dateString: '',
                     hours: 1,
-                    type: 'Sketching',
-                    medium: '',  
+                    type: 'Sketching',   // example default value. Set to empty string to unselect all options
+                    medium: 'Traditional',    // example default value. Set to empty string to unselect both radio buttons
 
                     // Array of activity records 
                     activityRecords: [],
 
                     // Data used to set up select and radio buttons 
-                    types: [ 'Sketching', 'Drawing', 'Painting' ],    // If you changed the activity, replace with appropriate options for your activity e.g. for video game, ['PC', 'PlayStation', 'Xbox' ]
-                    media:                          // If you changed the activity, replace with appropriate options for your activity e.g. for video games, it could be single player and multi player 
-                        {
-                            traditional: 'Traditional',  // painting, drawing etc. on paper, canvas...
-                            digital: 'Digital'          // on a computer or tablet           
-                        },   
+                    types: [ 'Sketching', 'Drawing', 'Painting' ],    // If you changed the activity, replace with appropriate options for your activity e.g. for video game, ['PC', 'PlayStation', 'Xbox' ]  
 
                     // list of form errors 
                     errors: []
@@ -162,8 +157,8 @@
                         this.errors.push('Select a type')
                     }
 
-                    if (!this.media) {
-                        this.errors.push('Select a media')
+                    if (!this.medium) {
+                        this.errors.push('Select a medium')
                     }
             
                     if (this.errors.length == 0) {
@@ -183,7 +178,7 @@
                 }
             }, 
             computed: {
-                totalRecords() {
+                totalRecordsMessage() {
                     let numberOfRecords = this.activityRecords.length
                     if (numberOfRecords == 1) {
                         return '1 record'
